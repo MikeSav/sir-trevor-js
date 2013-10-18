@@ -4,7 +4,7 @@
  * Released under the MIT license
  * www.opensource.org/licenses/MIT
  *
- * 2013-10-17
+ * 2013-10-18
  */
 
 (function ($, _){
@@ -660,8 +660,9 @@
       }
     }
   
-    // Strip remaining HTML
-    markdown = markdown.replace(/<\/?[^>]+(>|$)/g, "");
+    // Strip remaining HTML, except for whitelisted tags
+    // TODO: Avoid the extra '\/?'s
+    markdown = markdown.replace(/<\/?(?!\/?strike|\/?del|\/?s>|\/?u)[^>]+(>|$)/g, "");
   
     return markdown;
   };
@@ -2087,6 +2088,19 @@
       text : "i"
     });
   
+    var StrikeThrough = SirTrevor.Formatter.extend({
+      title: "strikethrough",
+      cmd: "strikeThrough",
+      text: "s"
+    });
+  
+    var Underline = SirTrevor.Formatter.extend({
+      title: "underline",
+      cmd: "underline",
+      text: "u"
+    });
+  
+  
     var Link = SirTrevor.Formatter.extend({
   
       title: "link",
@@ -2135,6 +2149,8 @@
     */
     SirTrevor.Formatters.Bold = new Bold();
     SirTrevor.Formatters.Italic = new Italic();
+    SirTrevor.Formatters.StrikeThrough = new StrikeThrough();
+    SirTrevor.Formatters.Underline = new Underline();
     SirTrevor.Formatters.Link = new Link();
     SirTrevor.Formatters.Unlink = new UnLink();
   

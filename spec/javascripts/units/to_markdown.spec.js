@@ -168,4 +168,11 @@ describe("toMarkdown", function(){
     expect(markdown).toBe("[test](test)");
   });
 
+  it("keeps strikethrough tags", function(){
+    var html = "<strike>test</strike> <s>test</s> <del>test</del>",
+        markdown = SirTrevor.toMarkdown(html, "Text");
+
+    expect(markdown).toBe(html);
+  });
+
 });

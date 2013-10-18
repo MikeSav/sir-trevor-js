@@ -15,6 +15,19 @@
     text : "i"
   });
 
+  var StrikeThrough = SirTrevor.Formatter.extend({
+    title: "strikethrough",
+    cmd: "strikeThrough",
+    text: "s"
+  });
+
+  var Underline = SirTrevor.Formatter.extend({
+    title: "underline",
+    cmd: "underline",
+    text: "u"
+  });
+
+
   var Link = SirTrevor.Formatter.extend({
 
     title: "link",
@@ -63,6 +76,8 @@
   */
   SirTrevor.Formatters.Bold = new Bold();
   SirTrevor.Formatters.Italic = new Italic();
+  SirTrevor.Formatters.StrikeThrough = new StrikeThrough();
+  SirTrevor.Formatters.Underline = new Underline();
   SirTrevor.Formatters.Link = new Link();
   SirTrevor.Formatters.Unlink = new UnLink();
 

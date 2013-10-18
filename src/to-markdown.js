@@ -88,8 +88,9 @@ SirTrevor.toMarkdown = function(content, type) {
     }
   }
 
-  // Strip remaining HTML
-  markdown = markdown.replace(/<\/?[^>]+(>|$)/g, "");
+  // Strip remaining HTML, except for whitelisted tags
+  // TODO: Avoid the extra '\/?'s
+  markdown = markdown.replace(/<\/?(?!\/?strike|\/?del|\/?s>|\/?u)[^>]+(>|$)/g, "");
 
   return markdown;
 };
