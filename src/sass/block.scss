@@ -192,3 +192,27 @@ ul.st-text-block {
 .st-msg--error {
   color: $error-color;
 }
+
+.st-text-block table {
+    width: 100%;
+    position: relative;
+    border-collapse: collapse;
+    margin: 1em 0;
+
+    td, th {
+        min-width: 30px;
+        border: 1px solid black !important;
+    }
+    td {
+        border: 1px solid #ddd !important;
+    }
+    th {
+        border: 1px solid black !important;
+    }
+    thead tr {
+        border: 1px solid black !important;
+    }
+    tbody tr {
+        border: 1px solid #ddd !important;
+    }
+}

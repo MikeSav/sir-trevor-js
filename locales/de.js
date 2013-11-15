@@ -46,6 +46,9 @@ SirTrevor.Locales.de = {
     },
     heading: {
       'title': 'Heading'
+    },
+    table: {
+      'title': 'Tabelle'
     }
   }
 };
