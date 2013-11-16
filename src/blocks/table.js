@@ -7,31 +7,31 @@ SirTrevor.Blocks.Table = (function() {
   var template =  '<table>' +
                     '<thead>' +
                       '<tr>' +
-                        '<th contenteditable="true"></th>' +
-                        '<th contenteditable="true"></th>' +
+                        '<th contenteditable></th>' +
+                        '<th contenteditable></th>' +
                       '</tr>' +
                     '</thead>' +
                   '<tbody>' +
                     '<tr>' +
-                        '<td contenteditable="true"></td>' +
-                        '<td contenteditable="true"></td>' +
+                        '<td contenteditable></td>' +
+                        '<td contenteditable></td>' +
                       '</tr>' +
                     '</tbody>' +
                   '</table>';
 
-  function addCell(cellTag) {
+  function addCell(row, cellTag) {
     if (cellTag === undefined) {
       tag_template = _.template("<<%= tag %>>")
       cellTag = tag_template(
-        { tag: $(this).children().first().prop('tagName').toLowerCase() }
+        { tag: $(row).children().first().prop('tagName').toLowerCase() }
       );
     }
-    $(this).append($(cellTag, {contenteditable: true}));
+    $(row).append($(cellTag, {contenteditable: true}));
   };
 
   function addColumnHandler(ev) {
     ev.preventDefault();
-    this.getTable().find('tr').each(function () { _.bind(addCell, this)(); });
+    this.$table.find('tr').each(function () { addCell(this); });
   };
 
   function deleteColumnHandler(ev) {
@@ -47,7 +47,7 @@ SirTrevor.Blocks.Table = (function() {
     ev.preventDefault();
     row = $("<tr>");
     this.getTable().find('th').each(function () {
-        _.bind(addCell, row)("<td>");
+        addCell(row, "<td>");
     });
     this.getTable().find('tbody').append(row);
   };
@@ -74,13 +74,13 @@ SirTrevor.Blocks.Table = (function() {
 
     icon_name: 'table',
 
-    getTable: function() {
-      return this.getTextBlock().find('table');
-    },
-
     editorHTML: function() {
       editor_template = '<div class="st-text-block st-required">' + template + '</div>';
       return _.template(editor_template, this);
+    },
+
+    onBlockRender: function() {
+      this.$table = this.getTextBlock().find('table');
     },
 
     loadData: function(data){
