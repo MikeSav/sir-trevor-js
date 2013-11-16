@@ -37,7 +37,7 @@ SirTrevor.Blocks.Table = (function() {
 
   function deleteColumnHandler(ev) {
     ev.preventDefault();
-    this.getTable().find('tr').each(function () {
+    this.$table.find('tr').each(function () {
       if ($(this).children().length > 1) {
           $(this).children().last().remove();
       }
@@ -47,16 +47,16 @@ SirTrevor.Blocks.Table = (function() {
   function addRowHandler(ev) {
     ev.preventDefault();
     row = $("<tr>");
-    this.getTable().find('th').each(function () {
+    this.$table.find('th').each(function () {
         addCell(row, "<td>");
     });
-    this.getTable().find('tbody').append(row);
+    this.$table.find('tbody').append(row);
   };
 
   function deleteRowHandler(ev) {
     ev.preventDefault();
-    if (this.getTable().find('tbody tr').length > 1) {
-      this.getTable().find('tbody tr:last').remove();
+    if (this.$table.find('tbody tr').length > 1) {
+      this.$table.find('tbody tr:last').remove();
     }
   };
 
