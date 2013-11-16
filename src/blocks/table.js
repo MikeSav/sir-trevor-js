@@ -21,8 +21,8 @@ SirTrevor.Blocks.Table = (function() {
                   '</table>';
 
   function addCell(row, cellTag) {
+    var tag_template = _.template("<<%= tag %>>")
     if (cellTag === undefined) {
-      tag_template = _.template("<<%= tag %>>")
       cellTag = tag_template(
         { tag: $(row).children().first().prop('tagName').toLowerCase() }
       );
@@ -45,8 +45,8 @@ SirTrevor.Blocks.Table = (function() {
   };
 
   function addRowHandler(ev) {
+    var row = $("<tr>");
     ev.preventDefault();
-    row = $("<tr>");
     this.$table.find('th').each(function () {
         addCell(row, "<td>");
     });
@@ -76,7 +76,7 @@ SirTrevor.Blocks.Table = (function() {
     icon_name: 'table',
 
     editorHTML: function() {
-      editor_template = '<div class="st-text-block st-required">' + template + '</div>';
+      var editor_template = '<div class="st-text-block">' + template + '</div>';
       return _.template(editor_template, this);
     },
 
@@ -85,23 +85,54 @@ SirTrevor.Blocks.Table = (function() {
     },
 
     loadData: function(data){
-      // TODO: Implement
-      //this.getTextBlock().html("<ul>" + SirTrevor.toHTML(data.text, this.type) + "</ul>");
+      this.getTextBlock().html(SirTrevor.toHTML(data.text, this.type));
     },
 
-    toMarkdown: function(markdown) {
-      // TODO: Implement
-      //return markdown.replace(/<\/li>/mg,"\n")
-      //               .replace(/<\/?[^>]+(>|$)/g, "")
-      //               .replace(/^(.+)$/mg," - $1");
+    toMarkdown: function(html) {
+      function rowToMarkdown(row) {
+        var cells = $(row).children(),
+            md = cells.map(function() { return $(this).text(); })
+                .get().join(" | ");
+        if (cells[0].tagName === 'TH') {
+          md += "\n";
+          md += cells.map(function() { return "---"; }).get().join(" | ");
+        }
+        return md;
+      }
+
+      var markdown = $(html).find('tr').map(function(){
+        return rowToMarkdown(this);
+      }).get().join("\n");
+      if ($(html).find('caption').text() != "") {
+        markdown += "\n[" + $(html).find('caption').text() + "]";
+      }
       return markdown;
     },
 
-    toHTML: function(html) {
-      // TODO: Implement
-      //html = html.replace(/^ - (.+)$/mg,"<li>$1</li>")
-      //           .replace(/\n/mg, "");
-      return html;
+    toHTML: function(markdown) {
+      var html = $('<table><caption contenteditable></caption><thead><tr></tr></thead><tbody></tbody></table>'),
+          lines = markdown.split("\n"),
+          caption_re = /\[(.*)\]/,
+          lastline;
+      // Check for caption
+      lastline = lines[lines.length-1];
+      if (lastline.match(caption_re)) {
+        html.find('caption').text(lastline.match(caption_re)[1]);
+        lines = lines.slice(0, lines.length-1);
+      }
+      // Add header row
+      _.each(lines[0].split(" | "), function(content) {
+        html.find('thead tr').append('<th contenteditable>' + content + '</th>');
+      });
+      // Add remaining rows
+      _.each(lines.slice(2, lines.length), function(line) {
+        var row = $('<tr>');
+        _.each(line.split(" | "), function(content) {
+          row.append('<td contenteditable>' + content + '</th>');
+        });
+        html.find('tbody').append(row);
+      });
+      return html[0].outerHTML;
     },
 
     isEmpty: function() {
