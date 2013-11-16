@@ -5,6 +5,7 @@
 SirTrevor.Blocks.Table = (function() {
 
   var template =  '<table>' +
+                    '<caption contenteditable></caption>' +
                     '<thead>' +
                       '<tr>' +
                         '<th contenteditable></th>' +
